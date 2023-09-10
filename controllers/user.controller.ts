@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { IUser } from '../interfaces/user';
 import { default as User, default as userModel } from '../models/user.model';
+import { handleError } from '../utils/error';
 import { createAccessToken, createRefreshToken } from '../utils/jwtUtils';
 
 declare global {
@@ -11,14 +12,6 @@ declare global {
         }
     }
 }
-
-const handleError = (res: Response, err: Error | unknown) => {
-    if (err instanceof Error) {
-        return res.status(500).json({ message: err.message });
-    } else {
-        return res.status(500).json({ message: 'An unknown error occurred.' });
-    }
-};
 
 const userController = {
     register: async (req: Request, res: Response) => {

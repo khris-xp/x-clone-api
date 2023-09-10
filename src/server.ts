@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import mongoose from 'mongoose';
+import tweetRouter from '../routes/tweet.route';
 import uploadRouter from '../routes/upload.route';
 import userRouter from '../routes/user.route';
 
@@ -27,6 +28,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/user', userRouter);
 app.use('/api', uploadRouter);
+app.use('/api/tweet', tweetRouter);
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

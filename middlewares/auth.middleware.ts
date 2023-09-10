@@ -16,7 +16,6 @@ const authUser = (req: AuthRequest, res: Response, next: NextFunction) => {
                 const error = err as Error;
                 return res.status(400).json({ msg: error.message });
             }
-
             req.user = user;
             next();
         });
