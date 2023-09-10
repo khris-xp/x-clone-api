@@ -8,6 +8,7 @@ userRouter.get('/profile', authUser, userController.getUserProfile);
 userRouter.get('/users/:id', authUser, userController.getUser);
 userRouter.post('/follow', authUser, userController.updateFollowings);
 userRouter.put('/profile', authUser, userController.editUserProfile);
+userRouter.put('/edit-avatar', authUser, userController.editUserAvatar);
 userRouter.get('/all-followings', authUser, userController.getFollowings);
 userRouter.get('/all-followers', authUser, userController.getFollowers);
 

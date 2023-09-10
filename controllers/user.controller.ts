@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { IUser } from '../interfaces/user';
 import { default as User, default as userModel } from '../models/user.model';
 import { createAccessToken, createRefreshToken } from '../utils/jwtUtils';
@@ -196,6 +195,24 @@ const userController = {
             await user.save();
 
             res.json({ message: 'User updated successfully.' });
+        } catch (err) {
+            handleError(res, err)
+        }
+    },
+    editUserAvatar: async (req: Request, res: Response) => {
+        try {
+            const { avatar } = req.body;
+
+            const user = await userModel.findById(req.user?.id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+
+            user.profilePicture = avatar || user.profilePicture;
+
+            await user.save();
+
+            res.json({ message: 'User avatar updated successfully.' });
         } catch (err) {
             handleError(res, err)
         }
