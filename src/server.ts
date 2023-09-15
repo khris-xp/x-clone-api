@@ -19,7 +19,7 @@ app.use(fileUpload({
     useTempFiles: true
 }));
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8081;
 const URL = process.env.MONGODB_URI;
 
 app.get('/', (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ app.use('/api', uploadRouter);
 app.use('/api/tweet', tweetRouter);
 
 app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+    console.log(`⚡️[server]: Server is running`);
 });
 
 mongoose.connect(URL as string).then(() => console.log('MongoDB connected')).catch(err => console.log(err));
