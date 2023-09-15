@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import tweetModel from "../models/tweet.model";
-
+import { handleError } from "../utils/error";
 
 const tweetController = {
     createTweet: async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ const tweetController = {
 
             return res.json({ msg: "Created tweet!" });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     getTweets: async (req: Request, res: Response) => {
@@ -28,7 +28,7 @@ const tweetController = {
 
             return res.json({ tweets });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     getTweet: async (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ const tweetController = {
             return res.json({ tweet });
         }
         catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     updateTweet: async (req: Request, res: Response) => {
@@ -57,7 +57,7 @@ const tweetController = {
 
             return res.json({ msg: "Updated tweet!" });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     deleteTweet: async (req: Request, res: Response) => {
@@ -66,7 +66,7 @@ const tweetController = {
 
             return res.json({ msg: "Deleted tweet!" });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     likeTweet: async (req: Request, res: Response) => {
@@ -83,7 +83,7 @@ const tweetController = {
 
             return res.json({ msg: "Liked tweet!" });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     getTweetByUser: async (req: Request, res: Response) => {
@@ -92,7 +92,7 @@ const tweetController = {
 
             return res.json({ tweets });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     },
     reTweet: async (req: Request, res: Response) => {
@@ -109,7 +109,7 @@ const tweetController = {
 
             return res.json({ msg: "Retweeted tweet!" });
         } catch (err) {
-            return res.status(500).json({ msg: (err as Error).message });
+            handleError(res, err);
         }
     }
 }

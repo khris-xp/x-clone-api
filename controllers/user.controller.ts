@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { IUser } from '../interfaces/user';
 import { default as User, default as userModel } from '../models/user.model';
 import { handleError } from '../utils/error';
@@ -146,6 +147,42 @@ const userController = {
             res.json({ accessToken });
         }
         catch (err) {
+            handleError(res, err)
+        }
+    },
+    refreshToken: async (req: Request, res: Response) => {
+        try {
+            const rf_token = req.cookies.refreshToken;
+            if (!rf_token) return res.status(400).json({ msg: "Please login now!" });
+
+            const decoded = await jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET as string) as IUser;
+            if (!decoded) return res.status(400).json({ msg: "Please login now!" });
+
+            const user = await User.findById(decoded.id).select('-password');
+            if (!user) return res.status(400).json({ msg: "This account does not exist." });
+
+            const accessToken = createAccessToken({
+                id: user._id,
+                _id: undefined,
+                fullName: '',
+                username: '',
+                email: '',
+                password: '',
+                profilePicture: '',
+                coverPicture: '',
+                followers: [],
+                followings: [],
+                isAdmin: false,
+                desc: '',
+                city: '',
+                from: '',
+                relationship: 0,
+                createdAt: undefined,
+                updatedAt: undefined
+            });
+
+            res.json({ accessToken });
+        } catch (err) {
             handleError(res, err)
         }
     },

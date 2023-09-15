@@ -2,6 +2,7 @@ import cloudinaryResult from 'cloudinary';
 import dotenv from 'dotenv';
 import { Request, Response } from "express";
 import fs from 'fs';
+import { handleError } from '../utils/error';
 const cloudinary = require('cloudinary').v2;
 
 dotenv.config();
@@ -38,11 +39,7 @@ const uploadController = {
                 res.json({ public_id: result?.public_id, url: result?.secure_url });
             })
         } catch (err) {
-            if (err instanceof Error) {
-                return res.status(500).json({ msg: err.message });
-            } else {
-                return res.status(500).json({ msg: "An error occurred." });
-            }
+            handleError(res, err);
         }
     },
     deleteImage: async (req: Request, res: Response) => {
@@ -56,11 +53,7 @@ const uploadController = {
                 res.json({ msg: "Deleted image" });
             })
         } catch (err) {
-            if (err instanceof Error) {
-                return res.status(500).json({ msg: err.message });
-            } else {
-                return res.status(500).json({ msg: "An error occurred." });
-            }
+            handleError(res, err);
         }
     }
 }
