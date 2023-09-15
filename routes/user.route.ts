@@ -4,6 +4,7 @@ import authUser from "../middlewares/auth.middleware";
 
 userRouter.post('/register', userController.register);
 userRouter.post('/login', userController.login);
+userRouter.get('/refresh_token', authUser, userController.refreshToken);
 userRouter.get('/profile', authUser, userController.getUserProfile);
 userRouter.get('/users/:id', authUser, userController.getUser);
 userRouter.post('/follow', authUser, userController.updateFollowings);
