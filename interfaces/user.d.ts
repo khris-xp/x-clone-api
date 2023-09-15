@@ -1,6 +1,7 @@
 export interface IUser {
     _id: mongoose.Schema.Types.ObjectId;
     id: mongoose.Schema.Types.ObjectId;
+    fullName: string;
     username: string;
     email: string;
     password: string;

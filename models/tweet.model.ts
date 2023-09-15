@@ -16,6 +16,10 @@ const tweetSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
+    comments: {
+        type: Array,
+        default: []
+    },
     createdBy: {
         type: String,
         ref: "User"

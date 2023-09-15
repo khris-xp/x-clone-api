@@ -94,6 +94,23 @@ const tweetController = {
         } catch (err) {
             return res.status(500).json({ msg: (err as Error).message });
         }
+    },
+    reTweet: async (req: Request, res: Response) => {
+        try {
+            const tweet = await tweetModel.findById(req.params.id);
+
+            if (!tweet) return res.status(400).json({ msg: "Tweet not found." });
+
+            if (tweet.retweets.find(retweet => retweet === req?.user?.id)) return res.status(400).json({ msg: "You already retweeted this tweet." });
+
+            await tweetModel.findOneAndUpdate({ _id: req.params.id }, {
+                $push: { retweets: req?.user?.id }
+            }, { new: true });
+
+            return res.json({ msg: "Retweeted tweet!" });
+        } catch (err) {
+            return res.status(500).json({ msg: (err as Error).message });
+        }
     }
 }
 

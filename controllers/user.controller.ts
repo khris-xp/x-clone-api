@@ -16,7 +16,7 @@ declare global {
 const userController = {
     register: async (req: Request, res: Response) => {
         try {
-            const { username, email, password } = req.body;
+            const { fullName, username, email, password } = req.body;
 
             const user = await User.findOne({ email });
 
@@ -28,6 +28,7 @@ const userController = {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             const newUser = await User.create({
+                fullName,
                 username,
                 email,
                 password: hashedPassword
@@ -36,6 +37,7 @@ const userController = {
             const accessToken = createAccessToken({
                 id: newUser._id,
                 _id: undefined,
+                fullName: '',
                 username: '',
                 email: '',
                 password: '',
@@ -54,6 +56,7 @@ const userController = {
             const refreshToken = createRefreshToken({
                 id: newUser._id,
                 _id: undefined,
+                fullName: '',
                 username: '',
                 email: '',
                 password: '',
@@ -97,6 +100,7 @@ const userController = {
             const accessToken = createAccessToken({
                 id: user._id,
                 _id: undefined,
+                fullName: '',
                 username: '',
                 email: '',
                 password: '',
@@ -116,6 +120,7 @@ const userController = {
             const refreshToken = createRefreshToken({
                 id: user._id,
                 _id: undefined,
+                fullName: '',
                 username: '',
                 email: '',
                 password: '',
@@ -259,6 +264,7 @@ const userController = {
                 followingList.push({
                     _id, username, profilePicture,
                     id: undefined,
+                    fullName: '',
                     email: '',
                     password: '',
                     coverPicture: '',
@@ -296,6 +302,7 @@ const userController = {
                 followerList.push({
                     _id, username, profilePicture,
                     id: undefined,
+                    fullName: '',
                     email: '',
                     password: '',
                     coverPicture: '',
