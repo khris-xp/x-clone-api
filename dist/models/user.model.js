@@ -29,11 +29,11 @@ const userSchema = new mongoose_1.default.Schema({
     },
     profilePicture: {
         type: String,
-        default: 'https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png'
+        default: 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
     },
     coverPicture: {
         type: String,
-        default: 'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?w=2000'
+        default: 'https://images.unsplash.com/photo-1596387451750-f7bfb51461ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Y292ZXIlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80'
     },
     followers: {
         type: Array,
