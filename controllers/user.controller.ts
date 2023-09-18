@@ -254,7 +254,7 @@ const userController = {
     },
     updateFollowings: async (req: Request, res: Response) => {
         try {
-            const { userId } = req.body;
+            const userId = req.params.id;
 
             if (userId === req.user?.id) {
                 return res.status(400).json({ message: 'You cannot follow yourself.' });
@@ -280,6 +280,36 @@ const userController = {
             res.json({ message: 'User followed successfully.' });
         } catch (err) {
             handleError(res, err)
+        }
+    },
+    updateUnFollowings: async (req: Request, res: Response) => {
+        try {
+            const userId = req.params.id;
+
+            if (userId === req.user?.id) {
+                return res.status(400).json({ message: 'You cannot unfollow yourself.' });
+            }
+
+            const user = await userModel.findById(req.user?.id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+
+            const userToUnFollow = await userModel.findById(userId);
+            if (!userToUnFollow) {
+                return res.status(404).json({ message: 'User to unfollow not found.' });
+            }
+
+            if (!user.followings.includes(userId)) {
+                return res.status(400).json({ message: 'You already unfollow this user.' });
+            }
+
+            await user.updateOne({ $pull: { followings: userId } });
+            await userToUnFollow.updateOne({ $pull: { followers: req.user?.id } });
+
+            res.json({ message: 'User unfollowed successfully.' });
+        } catch (error) {
+            handleError(res, error)
         }
     },
     getFollowings: async (req: Request, res: Response) => {
@@ -360,8 +390,7 @@ const userController = {
     },
     getAllUsers: async (req: Request, res: Response) => {
         try {
-            const users = await userModel.find().select('-password');
-
+            const users = await userModel.find({ _id: { $ne: req.user?._id } }).select('-password');
             res.json(users);
         } catch (err) {
             handleError(res, err)

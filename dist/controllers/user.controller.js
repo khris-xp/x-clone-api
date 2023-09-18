@@ -242,7 +242,7 @@ const userController = {
     updateFollowings: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         var _d, _e, _f;
         try {
-            const { userId } = req.body;
+            const userId = req.params.id;
             if (userId === ((_d = req.user) === null || _d === void 0 ? void 0 : _d.id)) {
                 return res.status(400).json({ message: 'You cannot follow yourself.' });
             }
@@ -265,10 +265,36 @@ const userController = {
             (0, error_1.handleError)(res, err);
         }
     }),
-    getFollowings: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        var _g;
+    updateUnFollowings: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _g, _h, _j;
         try {
-            const user = yield user_model_1.default.findById((_g = req.user) === null || _g === void 0 ? void 0 : _g.id).select('-password');
+            const userId = req.params.id;
+            if (userId === ((_g = req.user) === null || _g === void 0 ? void 0 : _g.id)) {
+                return res.status(400).json({ message: 'You cannot unfollow yourself.' });
+            }
+            const user = yield user_model_1.default.findById((_h = req.user) === null || _h === void 0 ? void 0 : _h.id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+            const userToUnFollow = yield user_model_1.default.findById(userId);
+            if (!userToUnFollow) {
+                return res.status(404).json({ message: 'User to unfollow not found.' });
+            }
+            if (!user.followings.includes(userId)) {
+                return res.status(400).json({ message: 'You already unfollow this user.' });
+            }
+            yield user.updateOne({ $pull: { followings: userId } });
+            yield userToUnFollow.updateOne({ $pull: { followers: (_j = req.user) === null || _j === void 0 ? void 0 : _j.id } });
+            res.json({ message: 'User unfollowed successfully.' });
+        }
+        catch (error) {
+            (0, error_1.handleError)(res, error);
+        }
+    }),
+    getFollowings: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _k;
+        try {
+            const user = yield user_model_1.default.findById((_k = req.user) === null || _k === void 0 ? void 0 : _k.id).select('-password');
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
             }
@@ -301,9 +327,9 @@ const userController = {
         }
     }),
     getFollowers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        var _h;
+        var _l;
         try {
-            const user = yield user_model_1.default.findById((_h = req.user) === null || _h === void 0 ? void 0 : _h.id).select('-password');
+            const user = yield user_model_1.default.findById((_l = req.user) === null || _l === void 0 ? void 0 : _l.id).select('-password');
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
             }
@@ -336,8 +362,9 @@ const userController = {
         }
     }),
     getAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _m;
         try {
-            const users = yield user_model_1.default.find().select('-password');
+            const users = yield user_model_1.default.find({ _id: { $ne: (_m = req.user) === null || _m === void 0 ? void 0 : _m._id } }).select('-password');
             res.json(users);
         }
         catch (err) {
