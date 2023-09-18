@@ -86,6 +86,32 @@ const tweetController = {
             handleError(res, err);
         }
     },
+    dislikeTweet: async (req: Request, res: Response) => {
+        try {
+            const tweetId = req.params.id;
+            const userId = req.user?.id;
+
+            const tweet = await tweetModel.findById(tweetId);
+
+            if (!tweet) {
+                return res.status(404).json({ message: "Tweet not found." });
+            }
+
+            const userLiked = tweet.likes.includes(userId);
+
+            if (!userLiked) {
+                return res.status(400).json({ message: "You already unliked this tweet." });
+            }
+
+            await tweetModel.findByIdAndUpdate(tweetId, {
+                $pull: { likes: userId },
+            }, { new: true });
+
+            res.json({ message: "Tweet disliked successfully." });
+        } catch (err) {
+            handleError(res, err);
+        }
+    },
     getTweetByUser: async (req: Request, res: Response) => {
         try {
             const tweets = await tweetModel.find({ createdBy: req.params.id });
@@ -111,7 +137,33 @@ const tweetController = {
         } catch (err) {
             handleError(res, err);
         }
-    }
+    },
+    unRetweet: async (req: Request, res: Response) => {
+        try {
+            const tweetId = req.params.id;
+            const userId = req.user?.id;
+
+            const tweet = await tweetModel.findById(tweetId);
+
+            if (!tweet) {
+                return res.status(404).json({ message: "Tweet not found." });
+            }
+
+            const userRetweeted = tweet.retweets.includes(userId);
+
+            if (!userRetweeted) {
+                return res.status(400).json({ message: "You already un-retweeted this tweet." });
+            }
+
+            await tweetModel.findByIdAndUpdate(tweetId, {
+                $pull: { retweets: userId },
+            }, { new: true });
+
+            return res.json({ message: "Un-retweeted tweet!" });
+        } catch (err) {
+            handleError(res, err);
+        }
+    },
 }
 
 export default tweetController;

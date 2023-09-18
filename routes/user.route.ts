@@ -12,5 +12,6 @@ userRouter.put('/profile', authUser, userController.editUserProfile);
 userRouter.put('/edit-avatar', authUser, userController.editUserAvatar);
 userRouter.get('/all-followings', authUser, userController.getFollowings);
 userRouter.get('/all-followers', authUser, userController.getFollowers);
+userRouter.get('/', authUser, userController.getAllUsers);
 
 export default userRouter;

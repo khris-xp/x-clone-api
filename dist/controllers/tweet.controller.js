@@ -94,6 +94,28 @@ const tweetController = {
             (0, error_1.handleError)(res, err);
         }
     }),
+    dislikeTweet: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _d;
+        try {
+            const tweetId = req.params.id;
+            const userId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
+            const tweet = yield tweet_model_1.default.findById(tweetId);
+            if (!tweet) {
+                return res.status(404).json({ message: "Tweet not found." });
+            }
+            const userLiked = tweet.likes.includes(userId);
+            if (!userLiked) {
+                return res.status(400).json({ message: "You already unliked this tweet." });
+            }
+            yield tweet_model_1.default.findByIdAndUpdate(tweetId, {
+                $pull: { likes: userId },
+            }, { new: true });
+            res.json({ message: "Tweet disliked successfully." });
+        }
+        catch (err) {
+            (0, error_1.handleError)(res, err);
+        }
+    }),
     getTweetByUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const tweets = yield tweet_model_1.default.find({ createdBy: req.params.id });
@@ -104,7 +126,7 @@ const tweetController = {
         }
     }),
     reTweet: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        var _d;
+        var _e;
         try {
             const tweet = yield tweet_model_1.default.findById(req.params.id);
             if (!tweet)
@@ -112,13 +134,35 @@ const tweetController = {
             if (tweet.retweets.find(retweet => { var _a; return retweet === ((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.id); }))
                 return res.status(400).json({ msg: "You already retweeted this tweet." });
             yield tweet_model_1.default.findOneAndUpdate({ _id: req.params.id }, {
-                $push: { retweets: (_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d.id }
+                $push: { retweets: (_e = req === null || req === void 0 ? void 0 : req.user) === null || _e === void 0 ? void 0 : _e.id }
             }, { new: true });
             return res.json({ msg: "Retweeted tweet!" });
         }
         catch (err) {
             (0, error_1.handleError)(res, err);
         }
-    })
+    }),
+    unRetweet: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _f;
+        try {
+            const tweetId = req.params.id;
+            const userId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id;
+            const tweet = yield tweet_model_1.default.findById(tweetId);
+            if (!tweet) {
+                return res.status(404).json({ message: "Tweet not found." });
+            }
+            const userRetweeted = tweet.retweets.includes(userId);
+            if (!userRetweeted) {
+                return res.status(400).json({ message: "You already un-retweeted this tweet." });
+            }
+            yield tweet_model_1.default.findByIdAndUpdate(tweetId, {
+                $pull: { retweets: userId },
+            }, { new: true });
+            return res.json({ message: "Un-retweeted tweet!" });
+        }
+        catch (err) {
+            (0, error_1.handleError)(res, err);
+        }
+    }),
 };
 exports.default = tweetController;

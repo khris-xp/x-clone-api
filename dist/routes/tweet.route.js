@@ -11,5 +11,8 @@ tweetRouter.get('/', auth_middleware_1.default, tweet_controller_1.default.getTw
 tweetRouter.get('/:id', auth_middleware_1.default, tweet_controller_1.default.getTweet);
 tweetRouter.get('/user/:id', auth_middleware_1.default, tweet_controller_1.default.getTweetByUser);
 tweetRouter.post('/:id/like', auth_middleware_1.default, tweet_controller_1.default.likeTweet);
+tweetRouter.post('/:id/unlike', auth_middleware_1.default, tweet_controller_1.default.dislikeTweet);
 tweetRouter.post('/:id/retweet', auth_middleware_1.default, tweet_controller_1.default.reTweet);
+tweetRouter.post('/:id/unretweet', auth_middleware_1.default, tweet_controller_1.default.unRetweet);
+tweetRouter.delete('/:id', auth_middleware_1.default, tweet_controller_1.default.deleteTweet);
 exports.default = tweetRouter;

@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const comment_route_1 = __importDefault(require("../routes/comment.route"));
 const tweet_route_1 = __importDefault(require("../routes/tweet.route"));
 const upload_route_1 = __importDefault(require("../routes/upload.route"));
 const user_route_1 = __importDefault(require("../routes/user.route"));
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/user', user_route_1.default);
 app.use('/api', upload_route_1.default);
 app.use('/api/tweet', tweet_route_1.default);
+app.use('/api/comment', comment_route_1.default);
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running`);
 });

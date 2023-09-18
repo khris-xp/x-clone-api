@@ -357,6 +357,15 @@ const userController = {
         } catch (err) {
             handleError(res, err)
         }
+    },
+    getAllUsers: async (req: Request, res: Response) => {
+        try {
+            const users = await userModel.find().select('-password');
+
+            res.json(users);
+        } catch (err) {
+            handleError(res, err)
+        }
     }
 }
 

@@ -16,4 +16,5 @@ userRouter.put('/profile', auth_middleware_1.default, user_controller_1.default.
 userRouter.put('/edit-avatar', auth_middleware_1.default, user_controller_1.default.editUserAvatar);
 userRouter.get('/all-followings', auth_middleware_1.default, user_controller_1.default.getFollowings);
 userRouter.get('/all-followers', auth_middleware_1.default, user_controller_1.default.getFollowers);
+userRouter.get('/', auth_middleware_1.default, user_controller_1.default.getAllUsers);
 exports.default = userRouter;

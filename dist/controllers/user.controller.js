@@ -334,6 +334,15 @@ const userController = {
         catch (err) {
             (0, error_1.handleError)(res, err);
         }
+    }),
+    getAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const users = yield user_model_1.default.find().select('-password');
+            res.json(users);
+        }
+        catch (err) {
+            (0, error_1.handleError)(res, err);
+        }
     })
 };
 exports.default = userController;
